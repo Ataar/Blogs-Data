@@ -1,51 +1,86 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
-require("dotenv").config();
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const path = require('path');
+require('dotenv').config();
 
 const app = express();
-app.use(express.json());
+
+// Middleware
 app.use(cors());
+app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
 
-const Blog = require("./models/Blog");
+// MongoDB Connection
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/blogdb', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log('Connected to MongoDB'))
+.catch(err => console.error('MongoDB connection error:', err));
 
-// ✅ Get all blogs
-app.get("/blogs", async (req, res) => {
-  const blogs = await Blog.find().sort({ createdAt: -1 });
-  res.json(blogs);
+// Blog Schema and Model (should be in models/Blog.js)
+const blogSchema = new mongoose.Schema({
+  title: String,
+  category: String,
+  content: String,
+  authorId: String,
+  likes: { type: Number, default: 0 },
+  createdAt: { type: Date, default: Date.now }
 });
 
-// ✅ Create blog
-app.post("/blogs", async (req, res) => {
+const Blog = mongoose.model('Blog', blogSchema);
+
+// API Routes
+app.get('/api/blogs', async (req, res) => {
+  try {
+    const blogs = await Blog.find().sort({ createdAt: -1 });
+    res.json(blogs);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/blogs', async (req, res) => {
   try {
     const blog = new Blog(req.body);
     await blog.save();
     res.status(201).json(blog);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 });
 
-// ✅ Delete blog
-app.delete("/blogs/:id", async (req, res) => {
-  await Blog.findByIdAndDelete(req.params.id);
-  res.json({ message: "Deleted" });
+app.delete('/api/blogs/:id', async (req, res) => {
+  try {
+    await Blog.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Blog deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
-// ✅ Like blog
-app.patch("/blogs/:id", async (req, res) => {
-  const blog = await Blog.findByIdAndUpdate(req.params.id, req.body, { new: true });
-  res.json(blog);
+app.patch('/api/blogs/:id', async (req, res) => {
+  try {
+    const blog = await Blog.findByIdAndUpdate(
+      req.params.id,
+      { $inc: { likes: 1 } },
+      { new: true }
+    );
+    res.json(blog);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
-// ✅ Serve frontend
-app.use(express.static("public"));
+// Serve React app (for production)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
 
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`)))
-.catch(err => console.log(err));
+module.exports = app;
