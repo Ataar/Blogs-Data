@@ -49,7 +49,6 @@
 // })
 // .catch(err => console.error(err));
 
-
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -61,7 +60,7 @@ app.use(cors());
 
 const Blog = require("./models/Blog");
 
-// ✅ Routes
+// Routes
 app.get("/blogs", async (req, res) => {
   try {
     const blogs = await Blog.find().sort({ createdAt: -1 });
@@ -99,14 +98,14 @@ app.patch("/blogs/:id", async (req, res) => {
   }
 });
 
-// ✅ Serve frontend (agar public folder hai)
+// Serve frontend (public folder)
 app.use(express.static("public"));
 
-// ✅ Railway Port
+// Railway Port
 const PORT = process.env.PORT || 3000;
 
-// ✅ Railway MongoDB connection
-mongoose.connect(process.env.MONGO_URL || "mongodb://mongo:password@mongodb.railway.internal:27017", {
+// MongoDB connection
+mongoose.connect(process.env.MONGO_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
