@@ -1,0 +1,22 @@
+{
+  "name": "blog-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "watch": "concurrently \"nodemon index.js\" \"browser-sync start --proxy http://localhost:3000 --files public/**/*.* --port 3001 --reload-delay 500 --no-notify --no-ui\""
+  },
+  "dependencies": {
+    "bootstrap": "^4.6.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongoose": "^7.0.3"
+  },
+  "devDependencies": {
+    "browser-sync": "^3.0.4",
+    "concurrently": "^9.2.1",
+    "nodemon": "^2.0.22"
+  }
+}

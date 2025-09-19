@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog App</title>
+  <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="vendor/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- <button class="btn btn-primary m-3">Bootstrap Working 🎉</button> -->
+
+  <h1>📚 Blog App</h1>
+
+  <div class="container">
+    <div class="row">
+     <div class="col-md-6 offset-md-3">
+    <form id="blogForm">
+    <input type="text" id="title" placeholder="Title" required>
+    <input type="text" id="category" placeholder="Category">
+    <textarea id="content" placeholder="Write your blog..." required></textarea>
+    <input type="text" id="authorId" placeholder="Author ID">
+    <button type="submit">Add Blog</button>
+  </form>
+     </div>
+    </div>
+  </div>
+
+  <h2>All Blogs</h2>
+  <!-- <div id="blogs"></div> -->
+  <div id="blogs" class="blogs-grid"></div>
+
+  <!-- <p class="text-danger">csjdcj</p> -->
+   <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="vendor/bootstrap.bundle.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
