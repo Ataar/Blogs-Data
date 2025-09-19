@@ -1,4 +1,5 @@
-const API_BASE = "http://localhost:3000";
+// const API_BASE = "http://localhost:3000";
+const API_BASE = "";  // or you can also write "/"
 
 const blogForm = document.getElementById("blogForm");
 const blogsContainer = document.getElementById("blogs");
