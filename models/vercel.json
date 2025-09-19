@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "builds": [
     {
       "src": "index.js",
@@ -12,15 +12,12 @@
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
+      "src": "/blogs/(.*)",
       "dest": "/index.js"
     },
     {
       "src": "/(.*)",
       "dest": "/public/$1"
     }
-  ],
-  "env": {
-    "MONGODB_URI": "@mongodb_uri"
-  }
+  ]
 }
